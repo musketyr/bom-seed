@@ -1,0 +1,5 @@
+= Seed Project for Creating BOM Files
+
+This project helps you to create your own link:https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven bill-of-material (BOM)]
+to manage dependencies in your own project.
+
