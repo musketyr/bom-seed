@@ -11,17 +11,9 @@ to GitHub package repository.
 === Setup
 
 1. Fork this repository or download the latest package from link:Latest release[releases] and upload it to a new repository
-2. Re-enable actions for the fork
-
-image::https://user-images.githubusercontent.com/660405/70048802-742ef400-15cb-11ea-97de-e42d83b8f880.png[]
-
-3. Update `settings.gradle` with your own project name
-
-image::https://user-images.githubusercontent.com/660405/70048826-7f821f80-15cb-11ea-967c-0b8dc121b8b3.png[]
-
-4. Update `build.gradle` with your own group name
-
-image::https://user-images.githubusercontent.com/660405/70048819-7bee9880-15cb-11ea-9f81-dda8b3fe178b.png[]
+2. Re-enable actions for the fork image::https://user-images.githubusercontent.com/660405/70048802-742ef400-15cb-11ea-97de-e42d83b8f880.png[]
+3. Update `settings.gradle` with your own project name image::https://user-images.githubusercontent.com/660405/70048826-7f821f80-15cb-11ea-967c-0b8dc121b8b3.png[]
+4. Update `build.gradle` with your own group name image::https://user-images.githubusercontent.com/660405/70048819-7bee9880-15cb-11ea-9f81-dda8b3fe178b.png[]
 
 === Version Definition
 
