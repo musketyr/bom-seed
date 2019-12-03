@@ -3,3 +3,75 @@
 This project helps you to create your own link:https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven bill-of-material (BOM)]
 to manage dependencies in your own project.
 
+You can for this project to simply create your own BOM with automatic generation using GitHub Actions and publishing
+to GitHub package repository.
+
+== Usage
+
+=== Setup
+
+1. Fork this repository or download the latest package from Releases and upload to a new repository
+2. Re-enable actions for the fork
+3. Update `settings.gradle` with your own project name
+4. Update `build.gradle` with your own group name
+
+=== Version Definition
+
+Version definitions are located under `src/main/versions`.
+Feel free to delete the sample file `org.codehaus.groovy.properties`.
+Version placeholders are located in `_versions.properties`file:
+
+----
+groovy.version = 2.5.6
+----
+
+Once declared then you can use the placeholder in any versions file. The anatomy of the version file is following:
+
+1. The name of the file must match the group of the dependency with `.properties` suffix, e.g. `org.codehaus.groovy.properties`
+2. The version file defines the pairs of module names and version either using the placeholders or as version string:
+
+----
+# use property from _versions.properties
+groovy = groovy.version
+groovy-all = groovy.version
+
+# declare explicit version (not recommended)
+groovy-json = 2.5.6
+----
+
+=== Publishing
+
+New version is published to GitHub repository associated with the repository once the new tag is pushed to the repository.
+You can achieve new tag being pushed by creating a new release.
+
+=== Using the BOM
+
+You need to setup the GitHub repository in your project to start using the BOM:
+
+----
+repositories {
+    maven {
+        // TODO: replace with your own repository URL
+        url 'https://maven.pkg.github.com/musketyr/bom-seed'
+    }
+}
+----
+
+Depending on version of Gradle being used you can either used Spring dependencies plugin
+
+----
+depedencyManagement {
+    imports {
+        mavenBom "cz.orany:bom-seed:1.0.0"
+    }
+}
+----
+
+
+or the native Gradle's support to manage the dependencies using `platform` method`:
+
+----
+dependencies {
+    compile platform("cz.orany:bom-seed:1.0.0")
+}
+----
