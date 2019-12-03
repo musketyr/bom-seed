@@ -1,0 +1,80 @@
+plugins {
+    id 'maven-publish'
+}
+
+group 'cz.orany'
+version getTagOrDefault('1.0.0-SNAPSHOT')
+
+
+publishing {
+    repositories {
+        maven {
+            name = 'GitHub'
+            url = uri('https://maven.pkg.github.com/musketyr/bom-seed')
+            credentials {
+                username = ''
+                password = System.getenv('GITHUB_TOKEN')
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            pom.withXml {
+                def xml = asNode()
+
+                xml.children().last() + {
+                    def mkp = delegate
+
+                    File versionPropertiesFile = new File("$projectDir/src/main/versions/_versions.properties")
+                    def versionProperties = new Properties()
+                    versionProperties.load(new StringReader(versionPropertiesFile.text))
+
+                    mkp.properties {
+                        for (dep in versionProperties.entrySet()) {
+                            mkp."${dep.key}"(dep.value)
+                        }
+                    }
+
+                    mkp.dependencyManagement {
+                        mkp.dependencies {
+                            for (File propertyFile in new File("$projectDir/src/main/versions").listFiles()) {
+
+                                if (propertyFile.name == '_versions.properties') {
+                                    continue
+                                }
+
+                                String groupIdFromFile = propertyFile.name - '.properties'
+
+                                def versions = new Properties()
+                                versions.load(new StringReader(propertyFile.text))
+
+                                for (pair in versions.entrySet()) {
+                                    mkp.dependency {
+                                        String finalVersion = pair.value ==~ /\d.*/ ? pair.value : "\${$pair.value}"
+                                        mkp.groupId groupIdFromFile
+                                        mkp.artifactId pair.key
+                                        mkp.version finalVersion
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private static String getTagOrDefault(String defaultValue) {
+    String ref = System.getenv('GITHUB_REF')
+
+    if (!ref) {
+        return defaultValue
+    }
+
+    if (ref.startsWith('refs/tags/')) {
+        return ref.substring('refs/tags/'.length())
+    }
+
+    return defaultValue
+}
