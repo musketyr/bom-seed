@@ -10,7 +10,7 @@ publishing {
     repositories {
         maven {
             name = 'GitHub'
-            url = uri('https://maven.pkg.github.com/musketyr/bom-seed')
+            url = uri('https://maven.pkg.github.com/' + System.getenv('GITHUB_REPOSITORY'))
             credentials {
                 username = ''
                 password = System.getenv('GITHUB_TOKEN')
